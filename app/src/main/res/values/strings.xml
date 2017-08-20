@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">MyApp</string>
+    <string name="anTextDuplicator">Text Duplicator</string>
+    <string name="anWeather">Weather</string>
+    <string name="anLauncher">Select an activity!</string>
+    <string name="reset_activity">RESET</string>
+    <string name="maintitle">Enter text!</string>
+    <string name="submit">Submit</string>
+    <string name="result">Your text will appear down here!</string>
+    <string name="comingsoon">You are not supposed to see this... Coming soon!</string>
+    <string name="title_activity_launcher">LauncherActivity</string>
+
+
+    <string name="temp">Temperature</string>
+    <string name="humid">Humidity: </string>
+    <string name="pressure">Pressure: </string>
+    <string name="maxtemp">Max Temperature: </string>
+    <string name="mintemp">Min Temperature: </string>
+    <string name="description">Status</string>
+    <string name="windspeed">Wind Speed: </string>
+    <string name="speed">m/s</string>
+    <string name="deg">Deg</string>
+    <string name="clouds">Clouds: </string>
+    <string name="precipitation">Precipitation</string>
+    <string name="visibility">Visibility</string>
+    <string name="probability">Probability</string>
+    <string name="rain">Rain volume for the last 3 hours</string>
+    <string name="snow">Snow volume for the last 3 hours</string>
+    <string name="sunrise">Sunrise: </string>
+    <string name="sunset">Sunset: </string>
+    <string name="percentage">%</string>
+    <string name="hpa">hPa</string>
+    <string name="lastupdate">Last Update: </string>
+
+
+
+</resources>
