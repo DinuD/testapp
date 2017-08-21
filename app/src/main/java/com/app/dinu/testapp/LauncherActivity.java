@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import static com.app.dinu.testapp.WeatherActivity.isNetworkStatusAvailable;
+
 public class LauncherActivity extends AppCompatActivity {
 
     @Override
@@ -44,7 +46,11 @@ public class LauncherActivity extends AppCompatActivity {
                 }
                 if (pos == 1) {
                     Intent weather = new Intent(getApplicationContext(), WeatherActivity.class);
-                    startActivity(weather);
+                    if(isNetworkStatusAvailable(getApplicationContext())) {
+                        startActivity(weather);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Internet is not available", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

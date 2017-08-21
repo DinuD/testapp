@@ -3,6 +3,8 @@
     package="com.app.dinu.testapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +14,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:parentActivityName=".LauncherActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
 
             <!--
             <intent-filter>
@@ -27,22 +29,24 @@
         </activity>
         <activity
             android:name=".SecondActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"/>
-        <activity android:name=".LauncherActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LauncherActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WeatherActivity"
+        <activity
+            android:name=".WeatherActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:parentActivityName=".LauncherActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"></activity>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

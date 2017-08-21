@@ -1,9 +1,14 @@
 package com.app.dinu.testapp;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -107,6 +113,7 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private class WeatherTask extends AsyncTask<String, Void, Weather> {
+        ProgressDialog dialog=new ProgressDialog(getApplicationContext());
         @Override
         protected void onPostExecute(Weather weather) {
             super.onPostExecute(weather);
@@ -131,7 +138,6 @@ public class WeatherActivity extends AppCompatActivity {
             sunrise.setText(getString(R.string.sunrise) + sunriseDate);
             sunset.setText(getString(R.string.sunset) + sunsetDate);
             update.setText(getString(R.string.lastupdate) + lastupdate);
-
         }
 
         @Override
@@ -186,7 +192,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         final EditText cityInput = new EditText(WeatherActivity.this);
         cityInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        cityInput.setHint("London,UK");
+        cityInput.setHint("London,GB");
         builder.setView(cityInput);
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
@@ -220,5 +226,16 @@ public class WeatherActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public static boolean isNetworkStatusAvailable(Context context) {
+        ConnectivityManager connnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connnectivityManager != null) {
+            NetworkInfo netInfos = connnectivityManager.getActiveNetworkInfo();
+            if(netInfos != null)
+                if(netInfos.isConnected())
+                    return true;
+        }
+        return false;
     }
 }
