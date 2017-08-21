@@ -93,10 +93,8 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
 
-
         CityPreferences cityPreference = new CityPreferences(WeatherActivity.this);
         renderWeatherData(cityPreference.getCity());
-
     }
 
     public void renderWeatherData(String city) {
