@@ -1,10 +1,13 @@
 package com.app.dinu.testapp;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,11 +16,18 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HttpsURLConnection;
+
+import Util.Utils;
 import data.JSONWeatherParser;
 import data.WeatherHttpClient;
 import model.Weather;
@@ -81,13 +91,13 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
 
-        renderWeatherData("Craiova,RO");
+        renderWeatherData("Bucharest,RO");
 
     }
 
     public void renderWeatherData(String city) {
         WeatherTask weatherTask = new WeatherTask();
-        weatherTask.execute(new String[]{city});
+        weatherTask.execute(city);
     }
 
     private class WeatherTask extends AsyncTask<String, Void, Weather> {
@@ -100,10 +110,20 @@ public class WeatherActivity extends AppCompatActivity {
             //String sunsetDate = df.format(new Date(weather.place.getSunset()));
             //String lastupdate = df.format(new Date(weather.place.getLastupdate()));
 
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
+            //SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
-            Date date = new Date(weather.place.getSunrise());
-            String lastupdate = formatter.format(date);
+            //Date date = new Date(weather.place.getSunrise());
+            //String lastupdate = formatter.format(date);
+
+            java.text.DateFormat df = java.text.DateFormat.getTimeInstance();
+            String sunriseDate = df.format(new Date(weather.place.getSunrise()));
+            String sunsetDate = df.format(new Date((weather.place.getSunset())));
+            String lastupdate = df.format(new Date(weather.place.getLastupdate()));
+
+            //int seconds = (int) (weather.place.getSunrise() / 1000) % 60 ;
+            //int minutes = (int) ((weather.place.getSunrise() / (1000*60)) % 60);
+            //int hours   = (int) ((weather.place.getSunrise() / (1000*60*60)) % 24);
+            //String sunriseDate = String.valueOf(hours) + ":" + String.valueOf(minutes);
 
             //Log.v("data: ",  weather.currentCondition.getDescription());
             cityName.setText(weather.place.getCity() + ", " + weather.place.getCountry());
@@ -113,8 +133,8 @@ public class WeatherActivity extends AppCompatActivity {
             pressure.setText(getString(R.string.pressure) + weather.currentCondition.getPressure() + getString(R.string.hpa));
             wind.setText(getString(R.string.windspeed) + weather.wind.getSpeed() + " " + getString(R.string.speed));
             clouds.setText(getString(R.string.clouds) + weather.clouds.getPrecipitation() + getString(R.string.percentage));
-            //sunrise.setText(getString(R.string.sunrise) + sunriseDate);
-            //sunset.setText(getString(R.string.sunset) + sunsetDate);
+            sunrise.setText(getString(R.string.sunrise) + sunriseDate);
+            sunset.setText(getString(R.string.sunset) + sunsetDate);
             update.setText(getString(R.string.lastupdate) + lastupdate);
 
         }
@@ -125,8 +145,43 @@ public class WeatherActivity extends AppCompatActivity {
             String data = ((new WeatherHttpClient().getWeatherData(strings[0])));
             // And then parsing it and giving it to the weather object
             weather = JSONWeatherParser.getWeather(data);
+            weather.iconData = weather.currentCondition.getIcon();
             //Log.v("data: ",  weather.currentCondition.getDescription());
+            new DownloadImageAsyncTask().execute(weather.iconData);
             return weather;
+        }
+    }
+
+    private class DownloadImageAsyncTask extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            iconView.setImageBitmap(bitmap);
+            //super.onPostExecute(bitmap);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            return downloadImage(strings[0]);
+        }
+
+        private Bitmap downloadImage(String code) {
+            HttpURLConnection connection = null;
+            try {
+                connection = (HttpURLConnection) (new URL(Utils.ICON + code + ".png")).openConnection();
+                //connection = (HttpURLConnection) (new URL("http://openweathermap.org/img/w/01d.png")).openConnection();
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                connection.connect();
+
+                InputStream inputStream = connection.getInputStream();
+                if (inputStream != null) {
+                    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    return bitmap;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
