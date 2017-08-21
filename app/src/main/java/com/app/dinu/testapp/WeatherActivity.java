@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HttpsURLConnection;
 
 import Util.Utils;
+import data.CityPreferences;
 import data.JSONWeatherParser;
 import data.WeatherHttpClient;
 import model.Weather;
@@ -91,7 +93,9 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
 
-        renderWeatherData("Bucharest,RO");
+
+        CityPreferences cityPreference = new CityPreferences(WeatherActivity.this);
+        renderWeatherData(cityPreference.getCity());
 
     }
 
@@ -105,29 +109,18 @@ public class WeatherActivity extends AppCompatActivity {
         protected void onPostExecute(Weather weather) {
             super.onPostExecute(weather);
 
-            //java.text.DateFormat df = DateFormat.getTimeFormat(getApplicationContext());
-            //String sunriseDate = df.format(new Date(weather.place.getSunrise()));
-            //String sunsetDate = df.format(new Date(weather.place.getSunset()));
-            //String lastupdate = df.format(new Date(weather.place.getLastupdate()));
-
-            //SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-
-            //Date date = new Date(weather.place.getSunrise());
-            //String lastupdate = formatter.format(date);
-
             java.text.DateFormat df = java.text.DateFormat.getTimeInstance();
             String sunriseDate = df.format(new Date(weather.place.getSunrise()));
             String sunsetDate = df.format(new Date((weather.place.getSunset())));
             String lastupdate = df.format(new Date(weather.place.getLastupdate()));
 
-            //int seconds = (int) (weather.place.getSunrise() / 1000) % 60 ;
-            //int minutes = (int) ((weather.place.getSunrise() / (1000*60)) % 60);
-            //int hours   = (int) ((weather.place.getSunrise() / (1000*60*60)) % 24);
-            //String sunriseDate = String.valueOf(hours) + ":" + String.valueOf(minutes);
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+            String temptxt = decimalFormat.format(weather.currentCondition.getTemp());
 
             //Log.v("data: ",  weather.currentCondition.getDescription());
             cityName.setText(weather.place.getCity() + ", " + weather.place.getCountry());
-            temp.setText(weather.currentCondition.getTemp() + "°C");
+            temp.setText(temptxt + "°C");
+            //temp.setText(weather.currentCondition.getTemp() + "°C");
             description.setText(weather.currentCondition.getDescription());
             humidity.setText(getString(R.string.humid) + weather.currentCondition.getHumidity() + getString(R.string.percentage));
             pressure.setText(getString(R.string.pressure) + weather.currentCondition.getPressure() + getString(R.string.hpa));
@@ -194,9 +187,10 @@ public class WeatherActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        CityPreferences preferences = new CityPreferences(WeatherActivity.this);
         switch (item.getItemId()) {
             case R.id.refreshWeather:
-                renderWeatherData("Craiova,RO");
+                renderWeatherData(preferences.getCity());
                 return true;
             case R.id.changeCity:
 
