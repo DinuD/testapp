@@ -1,17 +1,21 @@
 package com.app.dinu.testapp;
 
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -176,6 +180,26 @@ public class WeatherActivity extends AppCompatActivity {
         }
     }
 
+    private void showInputDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(WeatherActivity.this);
+        builder.setTitle("Change city!");
+
+        final EditText cityInput = new EditText(WeatherActivity.this);
+        cityInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        cityInput.setHint("London,UK");
+        builder.setView(cityInput);
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                CityPreferences cityPreference = new CityPreferences(WeatherActivity.this);
+                cityPreference.setCity(cityInput.getText().toString());
+                // Displaying the data for the new entered city
+                renderWeatherData(cityPreference.getCity());
+            }
+        });
+        builder.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -191,7 +215,7 @@ public class WeatherActivity extends AppCompatActivity {
                 renderWeatherData(preferences.getCity());
                 return true;
             case R.id.changeCity:
-
+                showInputDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
