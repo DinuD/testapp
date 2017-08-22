@@ -1,12 +1,12 @@
-package com.app.dinu.testapp;
+package game;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+
+import com.app.dinu.testapp.R;
 
 /**
  * Created by drago on 8/22/2017.

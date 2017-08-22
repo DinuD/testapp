@@ -1,9 +1,10 @@
 package com.app.dinu.testapp;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
+
+import game.GameView;
 
 public class SecondActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package com.app.dinu.testapp;
+package game;
 
 import android.graphics.Canvas;
 import android.util.Log;
