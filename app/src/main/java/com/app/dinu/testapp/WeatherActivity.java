@@ -104,7 +104,12 @@ public class WeatherActivity extends AppCompatActivity {
         });
 
         CityPreferences cityPreference = new CityPreferences(WeatherActivity.this);
-        renderWeatherData(cityPreference.getCity());
+        try {
+            renderWeatherData(cityPreference.getCity());
+        } catch (NullPointerException e) {
+            System.out.println(e);
+            Toast.makeText(getApplicationContext(), "API is not working properly. Please try again later", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void renderWeatherData(String city) {
@@ -218,7 +223,12 @@ public class WeatherActivity extends AppCompatActivity {
         CityPreferences preferences = new CityPreferences(WeatherActivity.this);
         switch (item.getItemId()) {
             case R.id.refreshWeather:
-                renderWeatherData(preferences.getCity());
+                try {
+                    renderWeatherData(preferences.getCity());
+                } catch (NullPointerException e) {
+                    System.out.println(e);
+                    Toast.makeText(getApplicationContext(), "API is not working properly. Please try again later", Toast.LENGTH_LONG).show();
+                }
                 return true;
             case R.id.changeCity:
                 showInputDialog();
